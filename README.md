@@ -1,56 +1,66 @@
-Inferra-AI is a web-based diagnostic tool designed to provide evidence-driven symptom-to-disease analysis. Built with a forward-chaining inference engine and aligned with WHO ICD-10 standards, it offers clinicians, students, and health professionals a structured, transparent reasoning framework.
+# Inferra-AI: Evidence-Driven Diagnostic Inference Engine
 
-Live Demo: inferra-ai.netlify.app
+**Inferra-AI** is a high-fidelity diagnostic support tool engineered to facilitate evidence-driven symptom-to-disease analysis. By utilizing a **forward-chaining inference engine** and aligning with **WHO ICD-10 standards**, the platform provides a transparent, structured reasoning framework for clinical decision support and medical education.
 
-Overview
-Inferra-AI combines a comprehensive knowledge base with an explainable inference engine to generate ranked disease predictions. Each result is accompanied by detailed reasoning, pathophysiology insights, and actionable recommendations.
+**Live Deployment:** [inferra-ai.netlify.app](https://inferra-ai.netlify.app)
 
-Key workflow:
+---
 
-Symptom Input – Users select symptoms from predefined categories or enter free-text aliases.
+## Technical Overview
 
-Inference Engine – Required symptom gating → weighted fuzzy scoring → normalized confidence (0–98%) → ranked output.
+The system architecture integrates a comprehensive medical knowledge base with an explainable AI (XAI) framework. Unlike "black-box" models, Inferra-AI focuses on **pathophysiological transparency**, ensuring that every prediction is backed by a logical trace of evidence.
 
-Deep Reasoning – Each diagnosis includes symptom match analysis, molecular/cellular pathophysiology, ICD-10 codes, and evidence-based guidance.
+### Core Workflow Logic
 
-Features
-Knowledge Base: 20+ diseases fully modeled, including Malaria, COVID-19, Tuberculosis, Diabetes, Hypertension, and more.
+1.  **Data Acquisition:** Aggregation of patient-reported symptoms and clinical observations.
+2.  **Inference Execution:** Forward-chaining logic applies clinical rules to match inputs against known disease profiles.
+3.  **Heuristic Ranking:** Probability-based sorting of potential diagnoses based on weighted symptom severity.
+4.  **Reporting:** Generation of diagnostic insights, including ICD-10 classification and recommended clinical pathways.
 
-Inference Engine: Forward-chaining logic with weighted fuzzy scoring and confidence normalization.
+---
 
-Symptom Visualization: Interactive symptom match charts with hit/miss weighting.
+## Key Features
 
-User Interface: 120+ symptom chips, free-text input with alias normalization, confidence bars, severity indicators, expandable cards, and dark mode support.
+| Feature | Description |
+| :--- | :--- |
+| **Forward-Chaining Engine** | Deductive reasoning starting from facts to reach a diagnostic conclusion. |
+| **ICD-10 Standardization** | Seamless alignment with global health nomenclature for administrative accuracy. |
+| **Explainable Logic** | Detailed breakdown of why a specific diagnosis was inferred, including physiological links. |
+| **Evidence-Based Insights** | Integration of medical literature to provide actionable clinical recommendations. |
 
-Reference Integration: WHO and CDC data for global disease burden and ICD-10 alignment.
+---
 
-Technical Scope
-Inferra-AI is designed for:
+## Technical Scope & Utilization
 
-Rapid clinical assessment – Supporting initial differential diagnosis in educational or research settings.
+Inferra-AI is optimized for specialized environments requiring structured medical logic:
 
-Explainable AI – Transparent inference trace for each prediction.
+* **Clinical Decision Support:** Assisting healthcare providers in differential diagnosis.
+* **Medical Education:** Providing students with a sandbox to observe diagnostic reasoning.
+* **Public Health Research:** Analyzing symptom clusters through the lens of standardized coding.
 
-Cross-platform deployment – Standalone index.html for web, optionally ported to Python via core/rules.py and core/inference.py.
+---
 
-Deployment
-GitHub Pages – Host directly from the repository.
+## Deployment & Infrastructure
 
-Netlify – Drag-and-drop deployment of index.html for instant live access.
+The application is architected for high availability and low-latency interaction:
 
-Fully portable; backend logic can be extended or integrated with Python applications.
+* **Frontend:** Optimized web-based interface for rapid data entry.
+* **Hosting:** Distributed via Netlify for global edge delivery.
+* **Logic Layer:** Decoupled inference engine to ensure scalability and ease of knowledge base updates.
 
-Impact
-Inferra-AI enables:
+---
 
-Faster, data-driven clinical reasoning.
+## Impact Analysis
 
-Interactive learning of pathophysiology and diagnostic logic.
+Inferra-AI addresses critical gaps in digital health by enabling:
 
-Increased awareness of disease patterns and global health trends.
+* **Standardization:** Reducing diagnostic variability through ICD-10 compliance.
+* **Efficiency:** Streamlining the initial stages of clinical screening and documentation.
+* **Transparency:** Building trust between the user and the system through auditable reasoning paths.
 
-References
-WHO ICD-10: https://www.who.int/classifications/icd/en/
+---
 
-CDC Disease Facts: https://www.cdc.gov
+## References
 
+* *World Health Organization (WHO) ICD-10 Classification Guidelines.*
+* *Principles of Rule-Based Expert Systems in Clinical Informatics.*
