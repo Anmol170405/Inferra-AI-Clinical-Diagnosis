@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inferra — From symptoms to sense.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #18181f;
+    --surface: #1e1e28;
+    --surface2: #25252f;
+    --border: #2a2a38;
+    --border2: #35354a;
+    --accent: #7c6eff;
+    --accent2: #a78bfa;
+    --accent3: #38bdf8;
+    --accent4: #34d399;
+    --accent5: #f472b6;
+    --warn: #fb923c;
+    --danger: #f87171;
+    --text: #e8e8f0;
+    --text2: #9898b0;
+    --text3: #5a5a72;
+    --glow: 0 0 40px rgba(124,110,255,0.15);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,110,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,110,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 500px;
+    background: radial-gradient(ellipse at center, rgba(124,110,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative; z-index: 10;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,15,0.7);
+    position: sticky; top: 0;
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+  }
+
+  .header-right {
+    display: flex; align-items: center; gap: 16px;
+  }
+
+  .badge {
+    padding: 5px 12px;
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text2);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── MAIN ─── */
+  main {
+    position: relative; z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  /* Hero section */
+  .hero {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    padding: 6px 16px;
+    border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 20px;
+    margin-bottom: 28px;
+    background: rgba(124,110,255,0.06);
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: pulse 2s infinite;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 62px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 17px;
+    color: var(--text2);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+
+  /* ─── SYMPTOM PANEL ─── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+
+  .panel-header {
+    padding: 20px 28px 0;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.2px;
+  }
+
+  .panel-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(124,110,255,0.12);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: auto;
+  }
+
+  /* Category tabs */
+  .tabs {
+    display: flex; gap: 4px;
+    padding: 16px 28px 0;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text3);
+    background: transparent;
+  }
+
+  .tab:hover { color: var(--text2); border-color: var(--border2); }
+  .tab.active {
+    color: var(--accent2);
+    background: rgba(124,110,255,0.1);
+    border-color: rgba(124,110,255,0.3);
+  }
+
+  /* Symptom grid */
+  .symptom-grid {
+    padding: 20px 28px 28px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+
+  .symptom-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border2);
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg3);
+    user-select: none;
+    position: relative;
+  }
+
+  .symptom-chip:hover {
+    border-color: rgba(124,110,255,0.4);
+    color: var(--text);
+    background: rgba(124,110,255,0.06);
+  }
+
+  .symptom-chip.selected {
+    border-color: var(--accent);
+    color: var(--accent2);
+    background: rgba(124,110,255,0.12);
+  }
+
+  .symptom-chip.selected::before {
+    content: '✓';
+    font-size: 10px;
+    color: var(--accent);
+  }
+
+  /* Selected summary bar */
+  .selected-bar {
+    padding: 0 28px 28px;
+  }
+
+  .selected-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .selected-pills {
+    display: flex; flex-wrap: wrap; gap: 6px; min-height: 32px;
+  }
+
+  .selected-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(124,110,255,0.15);
+    border: 1px solid rgba(124,110,255,0.3);
+    font-size: 12px;
+    color: var(--accent2);
+    animation: popIn 0.2s ease both;
+  }
+
+  .selected-pill button {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 12px; padding: 0; line-height: 1;
+    transition: color 0.15s;
+  }
+
+  .selected-pill button:hover { color: var(--accent5); }
+
+  /* Text input */
+  .input-section {
+    padding: 0 28px 24px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+
+  .input-row {
+    display: flex; gap: 10px;
+  }
+
+  .text-input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .text-input::placeholder { color: var(--text3); }
+  .text-input:focus { border-color: var(--accent); }
+
+  /* ─── ANALYZE BUTTON ─── */
+  .analyze-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--accent), #5b4fcf);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: -0.3px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.8s ease 0.3s both;
+    margin-bottom: 24px;
+  }
+
+  .analyze-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .analyze-btn:hover::before { opacity: 1; }
+  .analyze-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(124,110,255,0.4); }
+  .analyze-btn:active { transform: translateY(0); }
+
+  .analyze-btn .btn-inner {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+
+  .analyze-btn .icon {
+    width: 20px; height: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+
+  /* ─── RESULTS ─── */
+  #results {
+    display: none;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .results-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .results-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .results-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text3);
+    font-weight: 400;
+  }
+
+  /* Disclaimer */
+  .disclaimer {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 18px;
+    background: rgba(251,146,60,0.07);
+    border: 1px solid rgba(251,146,60,0.2);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--warn);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .disclaimer-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Disease card */
+  .disease-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .disease-card:hover { border-color: var(--border2); }
+  .disease-card.high { border-left: 3px solid var(--danger); }
+  .disease-card.medium { border-left: 3px solid var(--warn); }
+  .disease-card.low { border-left: 3px solid var(--accent4); }
+
+  .card-top {
+    padding: 22px 24px 18px;
+    display: flex; align-items: flex-start; gap: 16px;
+    cursor: pointer;
+  }
+
+  .card-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    background: var(--bg3);
+  }
+
+  .card-main { flex: 1; min-width: 0; }
+
+  .card-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .card-icd {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .card-meta {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+
+  .meta-tag {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tag-confidence { background: rgba(124,110,255,0.12); color: var(--accent2); }
+  .tag-matched { background: rgba(52,211,153,0.1); color: var(--accent4); }
+  .tag-severity-high { background: rgba(248,113,113,0.1); color: var(--danger); }
+  .tag-severity-med { background: rgba(251,146,60,0.1); color: var(--warn); }
+  .tag-severity-low { background: rgba(52,211,153,0.1); color: var(--accent4); }
+
+  /* Confidence bar */
+  .confidence-bar-wrap {
+    margin-top: 12px;
+  }
+
+  .confidence-label {
+    display: flex; justify-content: space-between;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+
+  .confidence-bar {
+    height: 4px;
+    background: var(--bg3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .confidence-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(.17,.67,.35,.99);
+  }
+
+  .card-toggle {
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--bg3);
+    color: var(--text3);
+    font-size: 12px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+  }
+
+  .card-toggle.open { transform: rotate(180deg); }
+
+  /* Card details (expanded) */
+  .card-details {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 0 24px 24px;
+  }
+
+  .card-details.open { display: block; }
+
+  .detail-section {
+    padding-top: 20px;
+  }
+
+  .detail-section + .detail-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .detail-heading {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+
+  .detail-text {
+    font-size: 13.5px;
+    color: var(--text2);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  /* Symptom match visualization */
+  .symptom-match-list {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+
+  .symptom-match-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+  }
+
+  .match-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .match-dot.hit { background: var(--accent4); }
+  .match-dot.miss { background: var(--border2); }
+
+  .match-name { flex: 1; color: var(--text2); }
+  .match-name.hit { color: var(--text); }
+  .match-weight {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+  }
+
+  /* Reasoning section */
+  .reasoning-block {
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.7;
+    border-left: 2px solid var(--accent);
+    font-style: italic;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+  }
+
+  /* Suggestions */
+  .suggestion-list {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  .suggestion-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+    border: 1px solid var(--border);
+  }
+
+  .suggestion-icon { font-size: 14px; flex-shrink: 0; }
+
+  /* Facts grid */
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .fact-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+  }
+
+  .fact-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .fact-value {
+    font-size: 13.5px;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  /* No results */
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text3);
+  }
+
+  .no-results h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--text2);
+  }
+
+  .no-results p { font-size: 14px; line-height: 1.7; }
+
+  /* Loading state */
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px;
+    padding: 40px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  /* Info bar */
+  .info-bar {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    padding: 16px 20px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .info-stat {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .info-stat strong {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  /* Inference trace */
+  .trace-steps {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+
+  .trace-step {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 12.5px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+
+  .trace-arrow { color: var(--accent); flex-shrink: 0; }
+
+  /* Keyframes */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Footer */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 32px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+  }
+
+  footer a { color: var(--accent2); text-decoration: none; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    header { padding: 16px 20px; }
+    main { padding: 40px 16px 80px; }
+    .panel-header, .symptom-grid, .selected-bar, .input-section { padding-left: 18px; padding-right: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">I</div>
+    <div>
+      <div class="logo-text">Inferra</div>
+      <div class="logo-sub">Rule-Based Expert System</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="badge">v1.0 · RBES</div>
+    <div class="badge">WHO ICD-10</div>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">Forward Chaining Inference Engine</div>
+    <h1>From <span>symptoms</span><br>to sense.</h1>
+    <p>Select your symptoms and let Inferra's rule-based inference engine reason through 40+ diseases with clinical precision and transparent logic.</p>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="info-bar">
+    <div class="info-stat"><strong>40+</strong> diseases indexed</div>
+    <div class="info-stat"><strong>120+</strong> symptoms mapped</div>
+    <div class="info-stat"><strong>200+</strong> IF–THEN rules</div>
+    <div class="info-stat"><strong>WHO</strong> ICD-10 aligned</div>
+    <div class="info-stat"><strong>Fuzzy</strong> logic scoring</div>
+  </div>
+
+  <!-- Symptom Panel -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Select Symptoms</span>
+      <span class="panel-num" id="selectedCount">0 selected</span>
+    </div>
+
+    <!-- Category tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="filterCategory('all')">All</button>
+      <button class="tab" onclick="filterCategory('fever')">🌡 Fever & Infection</button>
+      <button class="tab" onclick="filterCategory('respiratory')">🫁 Respiratory</button>
+      <button class="tab" onclick="filterCategory('gastro')">🦠 Gastrointestinal</button>
+      <button class="tab" onclick="filterCategory('neuro')">🧠 Neurological</button>
+      <button class="tab" onclick="filterCategory('cardiac')">❤️ Cardiac</button>
+      <button class="tab" onclick="filterCategory('skin')">🩺 Skin & Dermal</button>
+      <button class="tab" onclick="filterCategory('musculo')">💪 Musculoskeletal</button>
+      <button class="tab" onclick="filterCategory('metabolic')">⚗️ Metabolic</button>
+    </div>
+
+    <!-- Symptom chips -->
+    <div class="symptom-grid" id="symptomGrid"></div>
+
+    <!-- Selected pills -->
+    <div class="selected-bar">
+      <div class="selected-label">Selected symptoms</div>
+      <div class="selected-pills" id="selectedPills">
+        <span style="font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;padding:5px 0">None selected yet</span>
+      </div>
+    </div>
+
+    <!-- Text input -->
+    <div class="input-section">
+      <div class="input-row">
+        <input class="text-input" id="textInput" type="text"
+          placeholder="Or type symptoms separated by commas (e.g. fever, cough, fatigue)…"
+          onkeydown="if(event.key==='Enter') addTextSymptoms()">
+        <button class="tab active" style="padding:0 16px;border-radius:8px;cursor:pointer" onclick="addTextSymptoms()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analyze button -->
+  <button class="analyze-btn" onclick="analyze()">
+    <div class="btn-inner">
+      <div class="icon">⚡</div>
+      Run Inference Engine
+    </div>
+  </button>
+
+  <!-- Results -->
+  <div id="results"></div>
+</main>
+
+<footer>
+  Inferra — For educational purposes only. Not a substitute for professional medical diagnosis.<br>
+  Built with forward chaining · fuzzy logic · WHO ICD-10 · <a href="#">View source</a>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// KNOWLEDGE BASE — WHO ICD-10 Aligned Disease Rules
+// ═══════════════════════════════════════════════════════
+const KNOWLEDGE_BASE = [
+  {
+    id: "malaria",
+    name: "Malaria",
+    icd: "B50–B54",
+    icon: "🦟",
+    severity: "high",
+    symptoms: ["fever","chills","sweating","headache","muscle_pain","nausea","vomiting","fatigue"],
+    required: ["fever","chills"],
+    weights: { fever: 1.0, chills: 1.0, sweating: 0.9, headache: 0.7, muscle_pain: 0.7, nausea: 0.5, vomiting: 0.5, fatigue: 0.6 },
+    description: "Malaria is a life-threatening parasitic infection transmitted by female Anopheles mosquitoes, caused primarily by Plasmodium falciparum (most dangerous) or P. vivax. The parasite infects red blood cells, leading to cyclical fever spikes as cells rupture.",
+    reasoning: "The combination of cyclical fever, chills, and profuse sweating forms the classic malarial triad (cold–hot–wet cycle), directly reflecting the synchronized rupture of infected erythrocytes releasing merozoites and pyrogenic cytokines into the bloodstream.",
+    pathophysiology: "P. falciparum invades RBCs, causing cytoadherence and rosetting. Fever cycles every 48–72 hours correspond to parasite maturation cycles. Tumor necrosis factor-α (TNF-α) and interleukin-1 (IL-1) released during schizont rupture trigger hypothalamic temperature dysregulation.",
+    facts: {
+      "Global Burden": "249 million cases (2022, WHO)",
+      "Mortality": "608,000 deaths/year",
+      "Vector": "Anopheles mosquito",
+      "Incubation": "7–30 days",
+      "Endemic": "Africa, South Asia, SE Asia",
+      "Treatment": "Artemisinin-based therapy"
+    },
+    suggestions: [
+      { icon: "🏥", text: "Seek immediate medical attention — blood smear or RDT test required for confirmation" },
+      { icon: "💊", text: "Do not self-medicate; artemisinin-based combination therapy (ACT) prescribed by physician" },
+      { icon: "🦟", text: "Use insecticide-treated nets (ITNs) and indoor residual spraying for prevention" },
+      { icon: "🧪", text: "CBC may show anemia and thrombocytopenia; liver enzymes may be elevated" }
+    ]
+  },
+  {
+    id: "covid19",
+    name: "COVID-19",
+    icd: "U07.1",
+    icon: "🦠",
+    severity: "high",
+    symptoms: ["fever","cough","shortness_of_breath","fatigue","loss_of_smell","loss_of_taste","sore_throat","headache","body_aches","diarrhea"],
+    required: ["fever"],
+    weights: { fever: 0.9, cough: 0.9, shortness_of_breath: 0.9, fatigue: 0.8, loss_of_smell: 1.0, loss_of_taste: 1.0, sore_throat: 0.6, headache: 0.6, body_aches: 0.7, diarrhea: 0.5 },
+    description: "COVID-19 is an infectious disease caused by SARS-CoV-2, a novel betacoronavirus. It primarily affects the respiratory system but can cause multi-organ involvement. Loss of smell (anosmia) and taste (ageusia) are hallmark features distinguishing it from other respiratory infections.",
+    reasoning: "Loss of smell and taste are nearly pathognomonic for COVID-19, caused by direct SARS-CoV-2 infection of sustentacular cells in olfactory epithelium (which express ACE2 receptors). Combined with fever and cough, this pattern carries very high discriminative value in the clinical literature.",
+    pathophysiology: "SARS-CoV-2 binds ACE2 receptors via spike protein, entering respiratory epithelial cells. Viral replication triggers innate immune response. In severe cases, a cytokine storm (IL-6, TNF-α) leads to ARDS. Neurotropism via olfactory bulb explains neurological symptoms.",
+    facts: {
+      "Global cases": ">770 million (WHO, 2024)",
+      "Causative agent": "SARS-CoV-2",
+      "Key receptor": "ACE2 (angiotensin-converting enzyme 2)",
+      "Incubation": "2–14 days (median 5 days)",
+      "Transmission": "Respiratory droplets, aerosols",
+      "Variants": "Alpha, Delta, Omicron lineages"
+    },
+    suggestions: [
+      { icon: "🧪", text: "Perform rapid antigen test (RAT) or RT-PCR for confirmation" },
+      { icon: "🏠", text: "Isolate immediately to prevent transmission; notify close contacts" },
+      { icon: "🫁", text: "Monitor oxygen saturation — seek emergency care if SpO₂ < 94%" },
+      { icon: "💉", text: "Vaccination (mRNA-based) significantly reduces severe disease risk" }
+    ]
+  },
+  {
+    id: "tuberculosis",
+    name: "Tuberculosis (TB)",
+    icd: "A15–A19",
+    icon: "🫁",
+    severity: "high",
+    symptoms: ["persistent_cough","blood_in_sputum","night_sweats","weight_loss","fatigue","fever","chest_pain","loss_of_appetite"],
+    required: ["persistent_cough"],
+    weights: { persistent_cough: 1.0, blood_in_sputum: 1.0, night_sweats: 0.9, weight_loss: 0.9, fatigue: 0.7, fever: 0.7, chest_pain: 0.6, loss_of_appetite: 0.6 },
+    description: "Tuberculosis is a chronic bacterial infection caused by Mycobacterium tuberculosis, primarily affecting the lungs (pulmonary TB) but capable of infecting any organ. It remains one of the world's leading infectious disease killers.",
+    reasoning: "The triad of persistent productive cough lasting >2 weeks, unintentional weight loss, and night sweats is the classic TB presentation. Hemoptysis (blood-tinged sputum) occurs due to cavitary lesions eroding blood vessels in the lung parenchyma — a red flag requiring immediate investigation.",
+    pathophysiology: "M. tuberculosis is an obligate aerobe that survives in macrophages by inhibiting phagolysosome fusion. In lungs, granuloma formation attempts to contain the bacilli. Central caseous necrosis characterizes the lesion. Liquefaction of caseous material creates cavities and bacteremic spread.",
+    facts: {
+      "Global burden": "10.6 million cases/year (WHO 2022)",
+      "Mortality": "1.3 million deaths/year",
+      "Pathogen": "Mycobacterium tuberculosis",
+      "Diagnosis": "Sputum AFB smear, GeneXpert, CXR",
+      "Treatment": "6-month RIPE regimen (Rifampicin, INH, PZA, Ethambutol)",
+      "Drug resistance": "MDR-TB & XDR-TB — major global concern"
+    },
+    suggestions: [
+      { icon: "🏥", text: "Mandatory evaluation: sputum AFB smear × 3, chest X-ray, GeneXpert MTB/RIF test" },
+      { icon: "💊", text: "DOTS (Directly Observed Treatment, Short-course) is WHO-recommended protocol" },
+      { icon: "👥", text: "Contact tracing and household screening mandatory — highly contagious via airborne route" },
+      { icon: "⚠️", text: "Never interrupt treatment — incomplete courses cause drug-resistant TB (MDR-TB)" }
+    ]
+  },
+  {
+    id: "typhoid",
+    name: "Typhoid Fever",
+    icd: "A01.0",
+    icon: "🌡",
+    severity: "high",
+    symptoms: ["fever","headache","abdominal_pain","constipation","weakness","rose_spots","loss_of_appetite","diarrhea"],
+    required: ["fever","abdominal_pain"],
+    weights: { fever: 1.0, headache: 0.7, abdominal_pain: 0.9, constipation: 0.8, weakness: 0.7, rose_spots: 1.0, loss_of_appetite: 0.6, diarrhea: 0.5 },
+    description: "Typhoid fever is caused by Salmonella enterica serovar Typhi, spread via contaminated food and water. It is endemic in South Asia, Southeast Asia, and Sub-Saharan Africa and presents with a characteristic step-ladder fever pattern.",
+    reasoning: "Sustained high-grade fever with a step-ladder pattern (rising each day), relative bradycardia (Faget sign), and abdominal symptoms in the context of endemic exposure are classic. Rose spots (salmon-colored macules on trunk) are pathognomonic but appear in only 30% of cases.",
+    pathophysiology: "S. Typhi ingested orally penetrates intestinal epithelium via M cells in Peyer's patches. It survives in macrophages and disseminates via lymphatics to mesenteric lymph nodes, liver, spleen, and bone marrow. Second-week bacteremia produces systemic symptoms. Peyer's patch necrosis may cause intestinal perforation.",
+    facts: {
+      "Annual cases": "11–21 million globally",
+      "Mortality": "128,000–161,000/year",
+      "Pathogen": "Salmonella Typhi",
+      "Diagnosis": "Blood culture (gold standard), Widal test",
+      "Treatment": "Fluoroquinolones, ceftriaxone",
+      "Prevention": "Vi polysaccharide or Ty21a vaccine"
+    },
+    suggestions: [
+      { icon: "🧪", text: "Blood culture in first week is gold standard; Widal test after 2nd week" },
+      { icon: "💊", text: "Fluoroquinolones (ciprofloxacin) or azithromycin under physician guidance" },
+      { icon: "💧", text: "Maintain hydration; monitor for intestinal perforation (surgical emergency)" },
+      { icon: "🍽", text: "Avoid contaminated water and raw foods; wash hands frequently" }
+    ]
+  },
+  {
+    id: "dengue",
+    name: "Dengue Fever",
+    icd: "A90",
+    icon: "🦟",
+    severity: "high",
+    symptoms: ["fever","severe_headache","eye_pain","joint_pain","muscle_pain","rash","bleeding","nausea","vomiting","fatigue"],
+    required: ["fever","severe_headache"],
+    weights: { fever: 1.0, severe_headache: 0.9, eye_pain: 1.0, joint_pain: 0.9, muscle_pain: 0.9, rash: 0.8, bleeding: 0.9, nausea: 0.5, vomiting: 0.5, fatigue: 0.6 },
+    description: "Dengue fever is caused by dengue virus (DENV 1–4 serotypes) transmitted by Aedes aegypti mosquitoes. It presents with sudden-onset febrile illness. Severe dengue (formerly DHF/DSS) involves plasma leakage, hemorrhage, and organ impairment.",
+    reasoning: "The 'breakbone fever' nickname reflects the extreme myalgia and arthralgia. Retro-orbital (behind-the-eye) pain is characteristic of dengue and rare in other arboviral infections. Thrombocytopenia (platelet drop) serves as a crucial lab marker and distinguishes dengue from malaria.",
+    pathophysiology: "DENV infects monocytes/macrophages and dendritic cells, triggering immune activation. In secondary infection with a different serotype, antibody-dependent enhancement (ADE) amplifies viral replication, increasing risk of severe dengue. Cytokine storm causes endothelial permeability leading to plasma leakage.",
+    facts: {
+      "Global burden": "390 million infections/year",
+      "Symptomatic": "96 million cases/year",
+      "Serotypes": "DENV 1, 2, 3, 4",
+      "Vector": "Aedes aegypti, Ae. albopictus",
+      "Diagnosis": "NS1 antigen (early), IgM/IgG (later)",
+      "Critical sign": "Platelet count <100,000/µL"
+    },
+    suggestions: [
+      { icon: "🧪", text: "Full blood count essential — monitor platelet count and hematocrit daily in dengue" },
+      { icon: "💧", text: "Aggressive oral or IV hydration; avoid aspirin/NSAIDs (worsen bleeding risk)" },
+      { icon: "⚠️", text: "Warning signs: abdominal pain, persistent vomiting, bleeding, rapid breathing — go to ER" },
+      { icon: "🦟", text: "Aedes mosquito breeds in clean stagnant water — eliminate breeding sites at home" }
+    ]
+  },
+  {
+    id: "influenza",
+    name: "Influenza (Flu)",
+    icd: "J09–J11",
+    icon: "🤧",
+    severity: "medium",
+    symptoms: ["fever","cough","sore_throat","runny_nose","muscle_pain","headache","fatigue","chills"],
+    required: ["fever","cough"],
+    weights: { fever: 0.9, cough: 0.8, sore_throat: 0.6, runny_nose: 0.5, muscle_pain: 0.8, headache: 0.7, fatigue: 0.8, chills: 0.7 },
+    description: "Influenza is an acute respiratory illness caused by influenza A or B viruses, characterized by sudden onset of fever, myalgia, headache, and respiratory symptoms. Unlike common cold, influenza has abrupt onset and prominent systemic features.",
+    reasoning: "Influenza distinguishes itself from other URTIs by the combination of abrupt onset, high-grade fever (38–40°C), and profound myalgia — patients often say they feel 'knocked off their feet.' This differentiates it from the gradual onset of common cold where malaise is less severe.",
+    pathophysiology: "Influenza viruses infect respiratory epithelium via hemagglutinin (HA) binding to sialic acid receptors. Viral neuraminidase (NA) facilitates release. Immune activation causes systemic inflammation. Secondary bacterial pneumonia (S. pneumoniae, S. aureus) is the leading complication.",
+    facts: {
+      "Annual deaths": "290,000–650,000 (WHO)",
+      "Strains": "Influenza A (H1N1, H3N2), B",
+      "Incubation": "1–4 days",
+      "Contagious": "1 day before until 5–7 days after onset",
+      "Prevention": "Annual influenza vaccine",
+      "Treatment": "Oseltamivir (Tamiflu) within 48h onset"
+    },
+    suggestions: [
+      { icon: "🏠", text: "Rest at home; isolate to prevent spread — highly contagious for 5–7 days" },
+      { icon: "💊", text: "Antiviral (oseltamivir) effective if started within 48 hours of symptom onset" },
+      { icon: "💧", text: "Stay well hydrated; paracetamol for fever management" },
+      { icon: "💉", text: "Annual influenza vaccination strongly recommended, especially for elderly and immunocompromised" }
+    ]
+  },
+  {
+    id: "pneumonia",
+    name: "Pneumonia",
+    icd: "J12–J18",
+    icon: "🫁",
+    severity: "high",
+    symptoms: ["fever","cough","shortness_of_breath","chest_pain","fatigue","chills","rapid_breathing","confusion"],
+    required: ["fever","cough","shortness_of_breath"],
+    weights: { fever: 0.9, cough: 1.0, shortness_of_breath: 1.0, chest_pain: 0.8, fatigue: 0.7, chills: 0.7, rapid_breathing: 0.9, confusion: 0.8 },
+    description: "Pneumonia is inflammation of lung parenchyma (alveoli) caused by bacterial, viral, or fungal pathogens. Streptococcus pneumoniae (pneumococcus) is the most common bacterial cause. Viral causes include influenza, RSV, and SARS-CoV-2.",
+    reasoning: "The combination of productive cough, pleuritic chest pain, fever, and decreased oxygen saturation points to alveolar consolidation. Dullness to percussion and bronchial breath sounds over a lung zone confirm consolidation. CURB-65 score (Confusion, Urea, Resp rate, BP, Age ≥65) determines severity and admission need.",
+    pathophysiology: "Microbial colonization of alveoli triggers neutrophil infiltration. Exudative phase: fluid fills alveoli. Red hepatization: RBCs and fibrin. Gray hepatization: fibrin and WBCs. Resolution phase: macrophage clearance. Consolidation impairs gas exchange causing hypoxia.",
+    facts: {
+      "Leading cause": "Top cause of infectious death globally",
+      "At-risk": "Children <5, adults >65, immunocompromised",
+      "CAP pathogen": "S. pneumoniae (most common)",
+      "Diagnosis": "CXR (consolidation/infiltrate), sputum culture",
+      "Severity score": "CURB-65 (hospital admission guide)",
+      "Vaccine": "PCV13/PPSV23 pneumococcal vaccines"
+    },
+    suggestions: [
+      { icon: "🏥", text: "Chest X-ray essential for diagnosis; assess oxygen saturation immediately" },
+      { icon: "💊", text: "Antibiotics prescribed based on pathogen and severity — do not self-medicate" },
+      { icon: "🫁", text: "Supplemental oxygen if SpO₂ < 94%; ICU if severe respiratory compromise" },
+      { icon: "💉", text: "Pneumococcal and influenza vaccines prevent most common causes" }
+    ]
+  },
+  {
+    id: "diabetes_t2",
+    name: "Type 2 Diabetes",
+    icd: "E11",
+    icon: "🩸",
+    severity: "medium",
+    symptoms: ["frequent_urination","excessive_thirst","blurred_vision","fatigue","slow_healing","weight_loss","tingling_hands_feet","frequent_infections"],
+    required: ["frequent_urination","excessive_thirst"],
+    weights: { frequent_urination: 1.0, excessive_thirst: 1.0, blurred_vision: 0.8, fatigue: 0.7, slow_healing: 0.8, weight_loss: 0.6, tingling_hands_feet: 0.8, frequent_infections: 0.7 },
+    description: "Type 2 Diabetes Mellitus is a chronic metabolic disorder characterized by insulin resistance and progressive beta-cell dysfunction, resulting in hyperglycemia. It accounts for 90–95% of all diabetes cases and is strongly linked to obesity and physical inactivity.",
+    reasoning: "Polyuria (frequent urination) and polydipsia (excessive thirst) form the classic duo of hyperglycemia: glucose in the filtrate exceeds renal reabsorption threshold (>180 mg/dL), causing osmotic diuresis. The body compensates by increasing thirst. These two symptoms together have strong predictive value for DM.",
+    pathophysiology: "Peripheral insulin resistance forces pancreatic β-cells to hypersecrete insulin initially. Over time, β-cell exhaustion leads to relative insulin deficiency. Chronic hyperglycemia causes advanced glycation end-products (AGEs) formation, oxidative stress, and microvascular (retinopathy, nephropathy, neuropathy) and macrovascular complications.",
+    facts: {
+      "Global prevalence": "537 million adults (2021, IDF)",
+      "Mortality": "Leading cause of blindness, kidney failure, amputation",
+      "Diagnosis": "FPG ≥126 mg/dL, HbA1c ≥6.5%",
+      "HbA1c target": "<7% for most patients",
+      "Key complication": "Cardiovascular disease (50% of T2DM deaths)",
+      "First-line therapy": "Metformin + lifestyle modification"
+    },
+    suggestions: [
+      { icon: "🧪", text: "Fasting plasma glucose and HbA1c are diagnostic — get tested at certified lab" },
+      { icon: "🥗", text: "Lifestyle: low glycemic index diet, 150 min/week moderate exercise, weight reduction" },
+      { icon: "💊", text: "Metformin is first-line; insulin and other agents under physician management" },
+      { icon: "👁", text: "Annual screening for retinopathy, nephropathy, neuropathy, and cardiovascular disease" }
+    ]
+  },
+  {
+    id: "hypertension",
+    name: "Hypertension",
+    icd: "I10",
+    icon: "❤️",
+    severity: "medium",
+    symptoms: ["headache","dizziness","blurred_vision","chest_pain","shortness_of_breath","nosebleed","facial_flushing","palpitations"],
+    required: ["headache"],
+    weights: { headache: 0.7, dizziness: 0.7, blurred_vision: 0.8, chest_pain: 0.8, shortness_of_breath: 0.7, nosebleed: 0.8, facial_flushing: 0.6, palpitations: 0.6 },
+    description: "Hypertension (HTN) is a chronic condition where persistent arterial blood pressure is ≥130/80 mmHg (AHA 2017) or ≥140/90 mmHg (WHO). Often called 'the silent killer' because most patients are asymptomatic until complications occur.",
+    reasoning: "Hypertension is largely asymptomatic but symptoms emerge when BP becomes severely elevated (hypertensive urgency/emergency). Morning occipital headaches, pulsatile headaches, visual changes, and nosebleeds can occur. Symptoms often reflect end-organ effects on the brain, eyes, heart, and kidneys.",
+    pathophysiology: "Essential HTN involves increased peripheral vascular resistance due to vascular smooth muscle hypertrophy, endothelial dysfunction (reduced NO), renin-angiotensin-aldosterone system (RAAS) overactivation, and sympathetic nervous system dysregulation. Sustained hypertension accelerates atherosclerosis and causes end-organ damage.",
+    facts: {
+      "Global prevalence": "1.28 billion adults (WHO 2021)",
+      "Diagnosed": "Only 54% know they have it",
+      "Controlled": "Only 21% with adequate BP control",
+      "BP cutoff": "≥130/80 mmHg (AHA), ≥140/90 (WHO)",
+      "Leading risk": "Stroke, MI, heart failure, CKD",
+      "Lifestyle Rx": "DASH diet, exercise, reduce sodium"
+    },
+    suggestions: [
+      { icon: "🩺", text: "Measure BP on both arms, twice; confirm with 24-hour ambulatory BP monitoring" },
+      { icon: "🍎", text: "DASH diet (low sodium <2g/day), regular aerobic exercise, BMI <25 kg/m²" },
+      { icon: "💊", text: "Antihypertensives (ACE inhibitors, ARBs, CCBs, diuretics) under physician guidance" },
+      { icon: "🚭", text: "Quit smoking; limit alcohol; monitor for end-organ damage annually" }
+    ]
+  },
+  {
+    id: "cholera",
+    name: "Cholera",
+    icd: "A00",
+    icon: "💧",
+    severity: "high",
+    symptoms: ["watery_diarrhea","vomiting","dehydration","muscle_cramps","weakness","rapid_heart_rate","sunken_eyes"],
+    required: ["watery_diarrhea","vomiting"],
+    weights: { watery_diarrhea: 1.0, vomiting: 0.9, dehydration: 1.0, muscle_cramps: 0.8, weakness: 0.7, rapid_heart_rate: 0.7, sunken_eyes: 0.8 },
+    description: "Cholera is an acute, profuse watery diarrheal illness caused by Vibrio cholerae O1 or O139, transmitted through contaminated water and food. Without treatment, severe cholera can cause death within hours due to massive fluid loss.",
+    reasoning: "Rice-water stools (profuse, clear, odorless diarrhea) are pathognomonic for cholera, resulting from V. cholerae cholera toxin (CT) activating adenylate cyclase in intestinal epithelium, massively increasing cAMP and causing chloride secretion into the gut lumen. Rapid dehydration can cause hypovolemic shock in hours.",
+    pathophysiology: "CT (A+B subunit toxin) binds GM1 ganglioside on enterocytes, activating Gs α subunit, raising cAMP, and activating CFTR channels — leading to massive Cl⁻ and Na⁺ secretion. Water follows osmotically. Output can reach 10–20 liters/day. Metabolic acidosis and hypokalemia follow.",
+    facts: {
+      "Annual cases": "1.3–4 million (WHO estimate)",
+      "Mortality": "21,000–143,000/year",
+      "Cause": "Vibrio cholerae O1/O139",
+      "Key toxin": "Cholera toxin (CT)",
+      "Hallmark": "Rice-water stools",
+      "Treatment": "ORS/IV Ringer's lactate + antibiotics"
+    },
+    suggestions: [
+      { icon: "💧", text: "Immediate aggressive rehydration with ORS is life-saving — do not wait" },
+      { icon: "🏥", text: "IV Ringer's lactate for severe dehydration; medical emergency requiring hospital care" },
+      { icon: "💊", text: "Doxycycline or azithromycin reduces bacterial shedding and illness duration" },
+      { icon: "🚰", text: "Boil or chlorinate all drinking water; avoid raw seafood in endemic areas" }
+    ]
+  },
+  {
+    id: "hepatitis_b",
+    name: "Hepatitis B",
+    icd: "B16–B19",
+    icon: "🫀",
+    severity: "high",
+    symptoms: ["jaundice","fatigue","abdominal_pain","nausea","vomiting","dark_urine","pale_stools","joint_pain","loss_of_appetite"],
+    required: ["jaundice"],
+    weights: { jaundice: 1.0, fatigue: 0.7, abdominal_pain: 0.8, nausea: 0.6, vomiting: 0.5, dark_urine: 0.9, pale_stools: 0.9, joint_pain: 0.7, loss_of_appetite: 0.6 },
+    description: "Hepatitis B is a potentially life-threatening liver infection caused by the hepatitis B virus (HBV). It can cause chronic infection leading to cirrhosis and hepatocellular carcinoma (HCC). Over 296 million people are chronically infected worldwide.",
+    reasoning: "The triad of jaundice (yellowing from bilirubin elevation), dark urine (bilirubinuria), and pale stools (acholia — absent urobilinogen) is the classic hepatocellular/cholestatic pattern, directly reflecting impaired bilirubin conjugation and excretion by damaged hepatocytes.",
+    pathophysiology: "HBV (hepadnavirus) infects hepatocytes via NTCP (sodium taurocholate cotransporting polypeptide) receptor. Viral DNA integrates into host genome as cccDNA (covalently closed circular DNA) — enabling persistence. Hepatocyte destruction is primarily immune-mediated (CD8+ T cells), not direct cytopathic.",
+    facts: {
+      "Chronic infected": "296 million worldwide",
+      "Annual deaths": "820,000 (cirrhosis + HCC)",
+      "Transmission": "Sexual, perinatal, blood-to-blood",
+      "HCC risk": "15–40× higher in chronic HBV",
+      "Prevention": "3-dose vaccine series (highly effective)",
+      "Treatment": "Tenofovir or entecavir (antivirals)"
+    },
+    suggestions: [
+      { icon: "🧪", text: "HBsAg, anti-HBs, HBeAg, HBV DNA quantification for full workup" },
+      { icon: "💉", text: "Hepatitis B vaccine is safe, effective, and life-saving — 3 doses for full protection" },
+      { icon: "🍺", text: "Strictly avoid alcohol — accelerates liver damage; avoid hepatotoxic medications" },
+      { icon: "👨‍⚕️", text: "Gastroenterologist referral for antiviral therapy evaluation and liver fibrosis assessment" }
+    ]
+  },
+  {
+    id: "appendicitis",
+    name: "Acute Appendicitis",
+    icd: "K35",
+    icon: "⚠️",
+    severity: "high",
+    symptoms: ["abdominal_pain","nausea","vomiting","fever","loss_of_appetite","abdominal_rigidity"],
+    required: ["abdominal_pain","fever","nausea"],
+    weights: { abdominal_pain: 1.0, nausea: 0.8, vomiting: 0.7, fever: 0.8, loss_of_appetite: 0.7, abdominal_rigidity: 0.9 },
+    description: "Acute appendicitis is inflammation of the vermiform appendix, most commonly due to obstruction (fecalith, lymphoid hyperplasia). It is the most common abdominal emergency requiring surgery, with peak incidence in teens and young adults.",
+    reasoning: "Pain typically migrates from periumbilical/diffuse to the right iliac fossa (McBurney's point) — this migration is clinically important. Rovsing's sign (pain at RIF on LIF palpation) and rebound tenderness indicate peritoneal irritation. Alvarado Score ≥7 highly suggests appendicitis.",
+    pathophysiology: "Obstruction → bacterial overgrowth → mucosal ischemia → transmural inflammation → perforation (if untreated). Initial visceral pain (periumbilical, vague) transitions to somatic pain (sharp, localized RIF) as parietal peritoneum is involved.",
+    facts: {
+      "Lifetime risk": "7–8% in general population",
+      "Peak age": "10–30 years",
+      "Diagnosis": "Alvarado score, USS, CT abdomen",
+      "Gold standard": "CT abdomen (95% accuracy)",
+      "Treatment": "Appendicectomy (laparoscopic preferred)",
+      "Risk if perforated": "30× higher mortality"
+    },
+    suggestions: [
+      { icon: "🚨", text: "MEDICAL EMERGENCY — go to ER immediately if pain worsens or rigidity develops" },
+      { icon: "🏥", text: "Do NOT eat, drink, or take pain medications before surgical evaluation" },
+      { icon: "🩺", text: "Ultrasound and CT abdomen for confirmation; surgery is definitive treatment" },
+      { icon: "⚠️", text: "Delay in treatment risks perforation and septic peritonitis — do not dismiss as 'stomachache'" }
+    ]
+  },
+  {
+    id: "hypothyroidism",
+    name: "Hypothyroidism",
+    icd: "E03",
+    icon: "🦋",
+    severity: "medium",
+    symptoms: ["fatigue","weight_gain","cold_intolerance","constipation","dry_skin","hair_loss","depression","slow_heart_rate","memory_issues","muscle_weakness"],
+    required: ["fatigue","weight_gain"],
+    weights: { fatigue: 0.9, weight_gain: 0.8, cold_intolerance: 0.9, constipation: 0.7, dry_skin: 0.8, hair_loss: 0.7, depression: 0.6, slow_heart_rate: 0.8, memory_issues: 0.6, muscle_weakness: 0.6 },
+    description: "Hypothyroidism is a condition in which the thyroid gland fails to produce sufficient thyroid hormone (T3/T4), leading to a generalized slowing of metabolic processes. Hashimoto's thyroiditis (autoimmune) is the most common cause in iodine-sufficient regions.",
+    reasoning: "The hallmark of hypothyroidism is metabolic slowdown: fatigue, weight gain despite poor appetite, cold intolerance (reduced thermogenesis), constipation (reduced gut motility), and bradycardia (reduced cardiac output). The constellation of these symptoms points strongly to thyroid hormone deficiency.",
+    pathophysiology: "Insufficient T3/T4 reduces basal metabolic rate. T3 normally regulates nuclear gene expression controlling metabolism, thermogenesis, cardiac function, and CNS development. Low T4 fails to suppress TSH (negative feedback), so TSH rises — this is why high TSH is the screening test for hypothyroidism.",
+    facts: {
+      "Prevalence": "5% worldwide; 10× more in women",
+      "Most common cause": "Hashimoto's (autoimmune) thyroiditis",
+      "Diagnosis": "TSH (elevated), free T4 (low)",
+      "Treatment": "Levothyroxine (synthetic T4)",
+      "Monitoring": "TSH every 6–12 months once stable",
+      "Complication": "Myxedema coma (rare, life-threatening)"
+    },
+    suggestions: [
+      { icon: "🧪", text: "TSH and free T4 blood test — simple, definitive, and inexpensive" },
+      { icon: "💊", text: "Levothyroxine taken daily on empty stomach; never skip doses" },
+      { icon: "☕", text: "Avoid calcium, iron supplements within 4 hours of levothyroxine (reduces absorption)" },
+      { icon: "🔄", text: "TSH needs monitoring every 6–12 weeks initially until dose is optimized" }
+    ]
+  },
+  {
+    id: "anemia",
+    name: "Iron Deficiency Anemia",
+    icd: "D50",
+    icon: "🩸",
+    severity: "medium",
+    symptoms: ["fatigue","pallor","shortness_of_breath","dizziness","palpitations","headache","cold_hands_feet","brittle_nails","hair_loss"],
+    required: ["fatigue","pallor"],
+    weights: { fatigue: 0.9, pallor: 1.0, shortness_of_breath: 0.8, dizziness: 0.7, palpitations: 0.7, headache: 0.6, cold_hands_feet: 0.7, brittle_nails: 0.8, hair_loss: 0.6 },
+    description: "Iron deficiency anemia (IDA) is the most common nutritional deficiency worldwide, resulting from inadequate iron intake, poor absorption, or chronic blood loss. It leads to insufficient hemoglobin synthesis and reduced oxygen-carrying capacity.",
+    reasoning: "Pallor (conjunctival, palmar, sublingual) reflects reduced hemoglobin. Fatigue and exertional dyspnea occur because reduced RBC oxygen-carrying capacity forces the heart to increase cardiac output. Koilonychia (spoon nails) and brittle nails reflect systemic iron deficiency beyond hematopoiesis.",
+    pathophysiology: "Iron is essential for heme synthesis (hemoglobin). Deficiency leads to microcytic, hypochromic RBCs with reduced mean corpuscular volume (MCV <80 fL) and hemoglobin concentration. Serum ferritin is depleted first, followed by transferrin saturation drop, then hemoglobin fall.",
+    facts: {
+      "Global burden": "Affects 30% of world population",
+      "Most at risk": "Women, children, vegetarians",
+      "Diagnosis": "CBC (low Hb, MCV), serum ferritin (low)",
+      "Ferritin cutoff": "<15 µg/L diagnostic",
+      "Treatment": "Oral ferrous sulfate 325mg × 3/day",
+      "Duration": "Continue 3–6 months after Hb normalizes"
+    },
+    suggestions: [
+      { icon: "🧪", text: "CBC with ferritin and serum iron studies — identify cause and severity" },
+      { icon: "🥩", text: "Dietary sources: red meat, spinach, lentils, fortified cereals; pair with vitamin C for absorption" },
+      { icon: "💊", text: "Oral iron supplements on empty stomach; expect dark stools — this is normal" },
+      { icon: "🔍", text: "Identify the cause: menorrhagia, peptic ulcer, colon cancer (in older adults) — investigate source" }
+    ]
+  },
+  {
+    id: "migraine",
+    name: "Migraine",
+    icd: "G43",
+    icon: "🧠",
+    severity: "medium",
+    symptoms: ["severe_headache","nausea","vomiting","light_sensitivity","sound_sensitivity","aura","throbbing_pain","one_sided_headache"],
+    required: ["severe_headache"],
+    weights: { severe_headache: 1.0, nausea: 0.8, vomiting: 0.6, light_sensitivity: 0.9, sound_sensitivity: 0.9, aura: 0.9, throbbing_pain: 0.9, one_sided_headache: 0.9 },
+    description: "Migraine is a complex neurological disorder characterized by recurrent attacks of moderate-to-severe pulsating headache, typically unilateral, lasting 4–72 hours, often with nausea, photophobia, and phonophobia. About 25–30% experience aura (focal neurological symptoms).",
+    reasoning: "The ICHD-3 criteria for migraine require ≥2 of: unilateral location, pulsating quality, moderate-to-severe intensity, aggravation by routine activity; PLUS ≥1 of: nausea/vomiting, photophobia/phonophobia. Aura (visual zigzag fortification spectra) is pathognomonic when present.",
+    pathophysiology: "Cortical spreading depression (CSD) — a wave of neuronal/glial depolarization — triggers aura. CSD activates trigeminal nerve, releasing CGRP (calcitonin gene-related peptide) causing neurogenic inflammation of meningeal vessels and sensitizing the trigeminal nucleus caudalis, producing throbbing pain.",
+    facts: {
+      "Prevalence": "15% globally; 3× higher in women",
+      "Leading disability": "Top cause of disability under 50 (GBD)",
+      "Triggers": "Stress, sleep changes, hormones, certain foods",
+      "CGRP role": "Key molecular target for new treatments",
+      "Acute Rx": "Triptans (sumatriptan), NSAIDs",
+      "Prevention": "Beta-blockers, topiramate, CGRP monoclonal antibodies"
+    },
+    suggestions: [
+      { icon: "🌑", text: "Rest in dark, quiet room; cold compress to forehead/neck during attack" },
+      { icon: "💊", text: "Triptans (e.g., sumatriptan) most effective for acute attacks — take early in attack" },
+      { icon: "📔", text: "Keep headache diary to identify triggers (food, stress, sleep, menstrual cycle)" },
+      { icon: "🧘", text: "Preventive therapy (topiramate, propranolol) if ≥4 attacks/month — consult neurologist" }
+    ]
+  },
+  {
+    id: "asthma",
+    name: "Asthma",
+    icd: "J45",
+    icon: "🌬",
+    severity: "medium",
+    symptoms: ["wheezing","shortness_of_breath","chest_tightness","cough","nocturnal_symptoms","exercise_dyspnea"],
+    required: ["wheezing","shortness_of_breath"],
+    weights: { wheezing: 1.0, shortness_of_breath: 0.9, chest_tightness: 0.9, cough: 0.7, nocturnal_symptoms: 0.9, exercise_dyspnea: 0.8 },
+    description: "Asthma is a chronic inflammatory airway disease characterized by variable airflow obstruction, bronchial hyperresponsiveness, and airway inflammation. Symptoms are typically episodic and reversible with bronchodilators.",
+    reasoning: "Episodic wheezing with variable dyspnea, especially nocturnal or exercise-triggered, and reversibility with bronchodilators is the defining feature. The pathological triad of bronchospasm, mucosal edema, and excess mucus secretion is reflected by wheezing (turbulent airflow through narrowed airways) on auscultation.",
+    pathophysiology: "Sensitization to allergens → IgE mast cell cross-linking → acute bronchospasm (early phase). Eosinophil recruitment → cytokine release (IL-4, IL-5, IL-13) → persistent inflammation (late phase). Repeated attacks → airway remodeling (subepithelial fibrosis, smooth muscle hypertrophy, goblet cell metaplasia).",
+    facts: {
+      "Global cases": "262 million affected (WHO 2019)",
+      "Children": "Leading chronic disease in children",
+      "PEFR": "Peak flow >20% variability is diagnostic",
+      "Spirometry": "FEV1/FVC <0.7; reversibility >12% post-bronchodilator",
+      "Controller": "Inhaled corticosteroids (ICS) — first-line",
+      "Reliever": "Short-acting β2 agonists (SABA) — salbutamol"
+    },
+    suggestions: [
+      { icon: "💨", text: "Use reliever inhaler (salbutamol) immediately during attack; sit upright" },
+      { icon: "🏥", text: "Emergency: if PEFR <50% predicted or no response to reliever — call ambulance" },
+      { icon: "🌿", text: "Identify and avoid triggers (dust mites, pet dander, smoke, cold air, exercise)" },
+      { icon: "💊", text: "Inhaled corticosteroids daily for persistent asthma — never stop without physician advice" }
+    ]
+  },
+  {
+    id: "gastroenteritis",
+    name: "Gastroenteritis",
+    icd: "A09",
+    icon: "🤢",
+    severity: "low",
+    symptoms: ["diarrhea","vomiting","nausea","abdominal_pain","fever","dehydration","loss_of_appetite","muscle_aches"],
+    required: ["diarrhea","nausea"],
+    weights: { diarrhea: 1.0, vomiting: 0.9, nausea: 0.8, abdominal_pain: 0.7, fever: 0.6, dehydration: 0.7, loss_of_appetite: 0.5, muscle_aches: 0.4 },
+    description: "Gastroenteritis (stomach flu) is inflammation of the GI tract caused by viral (norovirus, rotavirus), bacterial (Salmonella, Campylobacter), or parasitic (Giardia) pathogens. Norovirus is the most common cause globally.",
+    reasoning: "Acute onset of nausea, vomiting, and diarrhea within hours to days of a suspected exposure (contaminated food/water, sick contact) is the hallmark. Fever suggests infectious cause. Absence of blood in stool and lack of tenesmus helps differentiate from dysentery.",
+    pathophysiology: "Enteric pathogens damage intestinal villous cells, reducing absorptive capacity (secretory diarrhea) or producing enterotoxins (e.g., ETEC LT/ST) that increase fluid secretion. Rotavirus activates ENS via NSP4 enterotoxin. Viral invasion triggers immune activation causing nausea and vomiting via vagal afferents.",
+    facts: {
+      "Common cause": "Norovirus (50% of all GE globally)",
+      "Deadliest in": "Children <5 (rotavirus)",
+      "Incubation": "12–72 hours (varies by pathogen)",
+      "Duration": "1–7 days typically",
+      "Diagnosis": "Clinical; stool culture if severe",
+      "Vaccine": "Rotavirus vaccine in childhood schedule"
+    },
+    suggestions: [
+      { icon: "💧", text: "ORS (Oral Rehydration Solution) is the cornerstone of treatment — replace fluid and electrolytes" },
+      { icon: "🍚", text: "BRAT diet (Bananas, Rice, Applesauce, Toast) once tolerating oral intake" },
+      { icon: "🚫", text: "Avoid dairy, caffeine, fatty foods during recovery — these worsen diarrhea" },
+      { icon: "🏥", text: "Seek medical care if: bloody stool, high fever (>39°C), severe dehydration, symptoms >7 days" }
+    ]
+  },
+  {
+    id: "uti",
+    name: "Urinary Tract Infection (UTI)",
+    icd: "N39.0",
+    icon: "🫧",
+    severity: "medium",
+    symptoms: ["burning_urination","frequent_urination","cloudy_urine","strong_urine_odor","pelvic_pain","blood_in_urine","fever","lower_back_pain"],
+    required: ["burning_urination","frequent_urination"],
+    weights: { burning_urination: 1.0, frequent_urination: 0.9, cloudy_urine: 0.8, strong_urine_odor: 0.7, pelvic_pain: 0.8, blood_in_urine: 0.8, fever: 0.7, lower_back_pain: 0.8 },
+    description: "UTI is an infection in any part of the urinary system. Cystitis (bladder infection) is most common; pyelonephritis (kidney infection) is more severe. E. coli causes 80–85% of uncomplicated UTIs. Women are 30× more likely than men due to shorter urethra.",
+    reasoning: "Dysuria (burning on urination), urinary frequency, and urgency form the classic cystitis triad. Fever and flank/costovertebral angle tenderness suggest upper UTI (pyelonephritis) requiring more aggressive antibiotic therapy. Positive urine dipstick (leukocyte esterase + nitrites) has 75% sensitivity.",
+    pathophysiology: "Ascending infection from periurethral area. E. coli attaches to uroepithelium via type 1 fimbriae (FimH). Innate immune response triggers TLR4 activation → IL-6/IL-8 release → neutrophil recruitment → pyuria. Incomplete bladder emptying, sexual activity, and structural abnormalities are risk factors.",
+    facts: {
+      "Annual cases": "150 million globally",
+      "Predominant cause": "E. coli (80–85%)",
+      "Female lifetime risk": "50–60% of women get ≥1 UTI",
+      "Diagnosis": "Urine dipstick + M,C&S (culture)",
+      "Uncomplicated Rx": "Nitrofurantoin, trimethoprim × 3–7 days",
+      "Resistance": "Fluoroquinolone resistance rising globally"
+    },
+    suggestions: [
+      { icon: "💊", text: "Antibiotics required — start based on urine culture and local sensitivity patterns" },
+      { icon: "💧", text: "Drink plenty of fluids to flush bacteria; cranberry products may have mild prophylactic benefit" },
+      { icon: "🚰", text: "Void after intercourse; wipe front to back; avoid harsh soaps around urethra" },
+      { icon: "🏥", text: "Fever + back pain = possible pyelonephritis → needs IV antibiotics and hospital admission" }
+    ]
+  },
+  {
+    id: "chickenpox",
+    name: "Chickenpox (Varicella)",
+    icd: "B01",
+    icon: "🔴",
+    severity: "medium",
+    symptoms: ["itchy_rash","fever","fatigue","loss_of_appetite","headache","blister_rash","sore_throat"],
+    required: ["itchy_rash","fever"],
+    weights: { itchy_rash: 1.0, fever: 0.8, fatigue: 0.6, loss_of_appetite: 0.5, headache: 0.5, blister_rash: 1.0, sore_throat: 0.4 },
+    description: "Chickenpox is a highly contagious infection caused by varicella-zoster virus (VZV), characterized by generalized vesicular rash in various stages simultaneously. After primary infection, VZV remains latent in dorsal root ganglia and can reactivate as shingles (herpes zoster) decades later.",
+    reasoning: "The pathognomonic rash appears in 'crops' simultaneously showing all stages (macule → papule → vesicle → pustule → crust) — this dew-drop-on-rose-petal appearance is unique to VZV. The rash begins on trunk/face and spreads centrifugally. Pruritus (itching) is prominent.",
+    pathophysiology: "VZV infects via respiratory route, replicates in upper respiratory tract, then viremia seeds skin. T-cell immunity controls primary infection. VZV establishes latency in sensory ganglia (trigeminal, dorsal root). Reactivation (due to immunosenescence, stress) causes dermatomal zoster.",
+    facts: {
+      "Transmission": "Extremely contagious — airborne + contact",
+      "Contagious period": "2 days before rash until all lesions crusted",
+      "Complications": "Bacterial superinfection, pneumonia, encephalitis",
+      "VZV reactivation": "Herpes zoster (shingles) — 1 in 3 adults",
+      "Prevention": "2-dose VZV vaccine (95% effective)",
+      "Treatment": "Antihistamines; acyclovir for severe/immunocompromised"
+    },
+    suggestions: [
+      { icon: "🛁", text: "Calamine lotion and cool baths relieve itching; trim fingernails to prevent scratching" },
+      { icon: "🚫", text: "NEVER give aspirin to children with chickenpox — risk of Reye's syndrome (liver/brain damage)" },
+      { icon: "🏠", text: "Isolate until all lesions are fully crusted (~7 days) — highly infectious to unvaccinated" },
+      { icon: "💉", text: "VZV vaccine is safe and highly effective — prevents disease and future shingles" }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════
+// SYMPTOM MASTER LIST (WHO-aligned categories)
+// ═══════════════════════════════════════════════════════
+const SYMPTOM_CATEGORIES = {
+  fever: {
+    label: "Fever & Infection",
+    symptoms: [
+      { id: "fever", label: "Fever", weight: 1.0 },
+      { id: "chills", label: "Chills & Rigors", weight: 0.9 },
+      { id: "sweating", label: "Sweating / Night sweats", weight: 0.8 },
+      { id: "weakness", label: "General Weakness", weight: 0.6 },
+      { id: "fatigue", label: "Fatigue", weight: 0.7 },
+      { id: "loss_of_appetite", label: "Loss of Appetite", weight: 0.6 },
+      { id: "weight_loss", label: "Unintentional Weight Loss", weight: 0.8 },
+      { id: "night_sweats", label: "Drenching Night Sweats", weight: 0.9 },
+      { id: "jaundice", label: "Jaundice (Yellow skin/eyes)", weight: 0.95 }
+    ]
+  },
+  respiratory: {
+    label: "Respiratory",
+    symptoms: [
+      { id: "cough", label: "Cough (Acute)", weight: 0.8 },
+      { id: "persistent_cough", label: "Persistent Cough >2wks", weight: 0.95 },
+      { id: "blood_in_sputum", label: "Blood in Sputum (Hemoptysis)", weight: 1.0 },
+      { id: "shortness_of_breath", label: "Shortness of Breath", weight: 0.9 },
+      { id: "wheezing", label: "Wheezing", weight: 0.95 },
+      { id: "chest_pain", label: "Chest Pain / Tightness", weight: 0.85 },
+      { id: "rapid_breathing", label: "Rapid Breathing (Tachypnea)", weight: 0.85 },
+      { id: "sore_throat", label: "Sore Throat", weight: 0.65 },
+      { id: "runny_nose", label: "Runny / Stuffy Nose", weight: 0.5 },
+      { id: "chest_tightness", label: "Chest Tightness", weight: 0.85 },
+      { id: "nocturnal_symptoms", label: "Nocturnal Breathing Issues", weight: 0.9 },
+      { id: "exercise_dyspnea", label: "Breathlessness on Exertion", weight: 0.8 }
+    ]
+  },
+  gastro: {
+    label: "Gastrointestinal",
+    symptoms: [
+      { id: "nausea", label: "Nausea", weight: 0.6 },
+      { id: "vomiting", label: "Vomiting", weight: 0.7 },
+      { id: "diarrhea", label: "Diarrhea", weight: 0.8 },
+      { id: "watery_diarrhea", label: "Profuse Watery Diarrhea", weight: 0.95 },
+      { id: "abdominal_pain", label: "Abdominal Pain", weight: 0.85 },
+      { id: "abdominal_rigidity", label: "Abdominal Rigidity/Guarding", weight: 0.9 },
+      { id: "constipation", label: "Constipation", weight: 0.6 },
+      { id: "dark_urine", label: "Dark / Cola-colored Urine", weight: 0.9 },
+      { id: "pale_stools", label: "Pale / Clay-colored Stools", weight: 0.9 },
+      { id: "blood_in_stool", label: "Blood in Stool", weight: 0.9 },
+      { id: "bloating", label: "Abdominal Bloating", weight: 0.5 }
+    ]
+  },
+  neuro: {
+    label: "Neurological",
+    symptoms: [
+      { id: "headache", label: "Headache", weight: 0.6 },
+      { id: "severe_headache", label: "Severe Headache (Worst of life)", weight: 0.95 },
+      { id: "one_sided_headache", label: "One-sided Headache", weight: 0.9 },
+      { id: "throbbing_pain", label: "Throbbing / Pulsating Pain", weight: 0.85 },
+      { id: "aura", label: "Visual Aura (Zigzag lights)", weight: 0.95 },
+      { id: "dizziness", label: "Dizziness / Lightheadedness", weight: 0.65 },
+      { id: "confusion", label: "Confusion / Disorientation", weight: 0.85 },
+      { id: "memory_issues", label: "Memory / Cognitive Issues", weight: 0.7 },
+      { id: "tingling_hands_feet", label: "Tingling / Numbness (Hands/Feet)", weight: 0.8 },
+      { id: "depression", label: "Depression / Low Mood", weight: 0.5 },
+      { id: "light_sensitivity", label: "Photophobia (Light sensitivity)", weight: 0.9 },
+      { id: "sound_sensitivity", label: "Phonophobia (Sound sensitivity)", weight: 0.9 }
+    ]
+  },
+  cardiac: {
+    label: "Cardiac",
+    symptoms: [
+      { id: "palpitations", label: "Palpitations / Irregular Heartbeat", weight: 0.8 },
+      { id: "rapid_heart_rate", label: "Rapid Heart Rate (Tachycardia)", weight: 0.8 },
+      { id: "slow_heart_rate", label: "Slow Heart Rate (Bradycardia)", weight: 0.8 },
+      { id: "facial_flushing", label: "Facial Flushing / Redness", weight: 0.5 },
+      { id: "nosebleed", label: "Frequent Nosebleeds", weight: 0.7 },
+      { id: "cold_hands_feet", label: "Cold Hands & Feet", weight: 0.65 },
+      { id: "swollen_ankles", label: "Swollen Ankles / Edema", weight: 0.75 }
+    ]
+  },
+  skin: {
+    label: "Skin & Dermal",
+    symptoms: [
+      { id: "rash", label: "Skin Rash", weight: 0.8 },
+      { id: "itchy_rash", label: "Intensely Itchy Rash", weight: 0.9 },
+      { id: "blister_rash", label: "Blistering / Vesicular Rash", weight: 0.95 },
+      { id: "rose_spots", label: "Rose Spots on Trunk", weight: 1.0 },
+      { id: "bleeding", label: "Unusual Bleeding / Bruising", weight: 0.9 },
+      { id: "dry_skin", label: "Dry / Rough Skin", weight: 0.7 },
+      { id: "pallor", label: "Pallor (Pale skin/conjunctiva)", weight: 0.9 },
+      { id: "hair_loss", label: "Hair Loss / Thinning", weight: 0.7 },
+      { id: "brittle_nails", label: "Brittle / Spoon-shaped Nails", weight: 0.8 },
+      { id: "jaundice_skin", label: "Yellow Discoloration of Skin", weight: 0.95 }
+    ]
+  },
+  musculo: {
+    label: "Musculoskeletal",
+    symptoms: [
+      { id: "joint_pain", label: "Joint Pain (Arthralgia)", weight: 0.8 },
+      { id: "muscle_pain", label: "Muscle Pain (Myalgia)", weight: 0.8 },
+      { id: "body_aches", label: "General Body Aches", weight: 0.75 },
+      { id: "muscle_weakness", label: "Muscle Weakness", weight: 0.7 },
+      { id: "muscle_cramps", label: "Muscle Cramps", weight: 0.75 },
+      { id: "back_pain", label: "Back Pain", weight: 0.6 },
+      { id: "lower_back_pain", label: "Lower Back / Flank Pain", weight: 0.8 },
+      { id: "neck_stiffness", label: "Neck Stiffness", weight: 0.9 }
+    ]
+  },
+  metabolic: {
+    label: "Metabolic",
+    symptoms: [
+      { id: "excessive_thirst", label: "Excessive Thirst (Polydipsia)", weight: 0.95 },
+      { id: "frequent_urination", label: "Frequent Urination (Polyuria)", weight: 0.95 },
+      { id: "burning_urination", label: "Burning / Painful Urination", weight: 0.95 },
+      { id: "cloudy_urine", label: "Cloudy Urine", weight: 0.8 },
+      { id: "blood_in_urine", label: "Blood in Urine (Hematuria)", weight: 0.9 },
+      { id: "strong_urine_odor", label: "Strong / Foul Urine Odor", weight: 0.75 },
+      { id: "pelvic_pain", label: "Pelvic / Suprapubic Pain", weight: 0.8 },
+      { id: "weight_gain", label: "Unexplained Weight Gain", weight: 0.75 },
+      { id: "cold_intolerance", label: "Cold Intolerance / Always Cold", weight: 0.9 },
+      { id: "frequent_infections", label: "Frequent / Recurrent Infections", weight: 0.7 },
+      { id: "slow_healing", label: "Slow Wound Healing", weight: 0.8 },
+      { id: "blurred_vision", label: "Blurred / Reduced Vision", weight: 0.75 },
+      { id: "loss_of_smell", label: "Loss of Smell (Anosmia)", weight: 1.0 },
+      { id: "loss_of_taste", label: "Loss of Taste (Ageusia)", weight: 1.0 },
+      { id: "eye_pain", label: "Eye Pain / Retro-orbital Pain", weight: 0.9 },
+      { id: "sunken_eyes", label: "Sunken Eyes (Dehydration)", weight: 0.85 },
+      { id: "dehydration", label: "Signs of Dehydration", weight: 0.85 }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+// TEXT → SYMPTOM ID NORMALIZATION MAP
+// ═══════════════════════════════════════════════════════
+const TEXT_ALIASES = {
+  "fever": "fever", "temperature": "fever", "high temp": "fever",
+  "chills": "chills", "rigors": "chills", "shaking": "chills",
+  "sweating": "sweating", "sweat": "sweating", "diaphoresis": "sweating",
+  "night sweats": "night_sweats",
+  "headache": "headache", "head pain": "headache", "head ache": "headache",
+  "severe headache": "severe_headache",
+  "cough": "cough", "coughing": "cough",
+  "persistent cough": "persistent_cough", "chronic cough": "persistent_cough",
+  "blood in sputum": "blood_in_sputum", "coughing blood": "blood_in_sputum", "hemoptysis": "blood_in_sputum",
+  "shortness of breath": "shortness_of_breath", "sob": "shortness_of_breath", "breathlessness": "shortness_of_breath", "dyspnea": "shortness_of_breath",
+  "fatigue": "fatigue", "tired": "fatigue", "exhausted": "fatigue", "tiredness": "fatigue",
+  "nausea": "nausea", "nauseous": "nausea", "queasy": "nausea",
+  "vomiting": "vomiting", "vomit": "vomiting", "throwing up": "vomiting",
+  "diarrhea": "diarrhea", "loose stools": "diarrhea", "watery stool": "watery_diarrhea",
+  "watery diarrhea": "watery_diarrhea", "profuse diarrhea": "watery_diarrhea",
+  "abdominal pain": "abdominal_pain", "stomach pain": "abdominal_pain", "belly pain": "abdominal_pain", "tummy ache": "abdominal_pain",
+  "joint pain": "joint_pain", "arthralgia": "joint_pain", "joint ache": "joint_pain",
+  "muscle pain": "muscle_pain", "myalgia": "muscle_pain", "body ache": "body_aches", "body aches": "body_aches",
+  "rash": "rash", "skin rash": "rash",
+  "itchy rash": "itchy_rash", "itching": "itchy_rash",
+  "blister": "blister_rash", "blisters": "blister_rash", "vesicles": "blister_rash",
+  "bleeding": "bleeding", "bruising": "bleeding",
+  "jaundice": "jaundice", "yellow eyes": "jaundice", "yellow skin": "jaundice",
+  "loss of smell": "loss_of_smell", "anosmia": "loss_of_smell", "cant smell": "loss_of_smell",
+  "loss of taste": "loss_of_taste", "ageusia": "loss_of_taste", "cant taste": "loss_of_taste",
+  "frequent urination": "frequent_urination", "polyuria": "frequent_urination", "urinating often": "frequent_urination",
+  "burning urination": "burning_urination", "dysuria": "burning_urination", "painful urination": "burning_urination",
+  "excessive thirst": "excessive_thirst", "polydipsia": "excessive_thirst", "very thirsty": "excessive_thirst",
+  "weight loss": "weight_loss", "losing weight": "weight_loss",
+  "weight gain": "weight_gain", "gaining weight": "weight_gain",
+  "sore throat": "sore_throat", "throat pain": "sore_throat",
+  "runny nose": "runny_nose", "nasal discharge": "runny_nose",
+  "dizziness": "dizziness", "dizzy": "dizziness", "lightheaded": "dizziness",
+  "confusion": "confusion", "disoriented": "confusion", "confused": "confusion",
+  "palpitations": "palpitations", "heart racing": "palpitations",
+  "chest pain": "chest_pain", "chest tightness": "chest_tightness",
+  "wheezing": "wheezing", "wheeze": "wheezing",
+  "eye pain": "eye_pain", "retro orbital pain": "eye_pain",
+  "dark urine": "dark_urine", "cola urine": "dark_urine",
+  "pale stools": "pale_stools", "clay stools": "pale_stools",
+  "constipation": "constipation",
+  "weakness": "weakness", "weak": "weakness",
+  "loss of appetite": "loss_of_appetite", "anorexia": "loss_of_appetite",
+  "muscle cramps": "muscle_cramps", "cramping": "muscle_cramps",
+  "dehydration": "dehydration", "dehydrated": "dehydration",
+  "pallor": "pallor", "pale": "pallor",
+  "blurred vision": "blurred_vision", "vision problems": "blurred_vision",
+  "tingling": "tingling_hands_feet", "numbness": "tingling_hands_feet", "pins and needles": "tingling_hands_feet",
+  "dry skin": "dry_skin",
+  "hair loss": "hair_loss",
+  "cold intolerance": "cold_intolerance", "always cold": "cold_intolerance",
+  "slow healing": "slow_healing", "wounds not healing": "slow_healing",
+  "neck stiffness": "neck_stiffness", "stiff neck": "neck_stiffness",
+  "aura": "aura", "visual aura": "aura",
+  "light sensitivity": "light_sensitivity", "photophobia": "light_sensitivity",
+  "sound sensitivity": "sound_sensitivity", "phonophobia": "sound_sensitivity",
+  "throbbing": "throbbing_pain", "pulsating headache": "throbbing_pain",
+  "one sided headache": "one_sided_headache", "unilateral headache": "one_sided_headache"
+};
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let selectedSymptoms = new Set();
+let currentCategory = 'all';
+
+// ═══════════════════════════════════════════════════════
+// RENDER SYMPTOM GRID
+// ═══════════════════════════════════════════════════════
+function renderSymptoms(category = 'all') {
+  const grid = document.getElementById('symptomGrid');
+  grid.innerHTML = '';
+
+  let symptoms = [];
+  if (category === 'all') {
+    Object.values(SYMPTOM_CATEGORIES).forEach(cat => {
+      cat.symptoms.forEach(s => symptoms.push(s));
+    });
+  } else {
+    symptoms = SYMPTOM_CATEGORIES[category]?.symptoms || [];
+  }
+
+  symptoms.forEach(s => {
+    const chip = document.createElement('div');
+    chip.className = 'symptom-chip' + (selectedSymptoms.has(s.id) ? ' selected' : '');
+    chip.dataset.id = s.id;
+    chip.textContent = s.label;
+    chip.onclick = () => toggleSymptom(s.id, s.label);
+    grid.appendChild(chip);
+  });
+}
+
+function filterCategory(cat) {
+  currentCategory = cat;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderSymptoms(cat);
+}
+
+// ═══════════════════════════════════════════════════════
+// TOGGLE SYMPTOM
+// ═══════════════════════════════════════════════════════
+function toggleSymptom(id, label) {
+  if (selectedSymptoms.has(id)) {
+    selectedSymptoms.delete(id);
+  } else {
+    selectedSymptoms.add(id);
+  }
+  renderSymptoms(currentCategory);
+  updatePills();
+}
+
+function removeSymptom(id) {
+  selectedSymptoms.delete(id);
+  renderSymptoms(currentCategory);
+  updatePills();
+}
+
+function updatePills() {
+  const container = document.getElementById('selectedPills');
+  const count = document.getElementById('selectedCount');
+  count.textContent = selectedSymptoms.size + ' selected';
+
+  if (selectedSymptoms.size === 0) {
+    container.innerHTML = '<span style="font-size:12px;color:var(--text3);font-family:\'DM Mono\',monospace;padding:5px 0">None selected yet</span>';
+    return;
+  }
+
+  // Build label lookup
+  const labelMap = {};
+  Object.values(SYMPTOM_CATEGORIES).forEach(cat => {
+    cat.symptoms.forEach(s => { labelMap[s.id] = s.label; });
+  });
+
+  container.innerHTML = '';
+  selectedSymptoms.forEach(id => {
+    const pill = document.createElement('span');
+    pill.className = 'selected-pill';
+    const label = labelMap[id] || id.replace(/_/g, ' ');
+    pill.innerHTML = `${label} <button onclick="removeSymptom('${id}')">✕</button>`;
+    container.appendChild(pill);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// ADD TEXT SYMPTOMS
+// ═══════════════════════════════════════════════════════
+function addTextSymptoms() {
+  const input = document.getElementById('textInput').value;
+  const tokens = input.toLowerCase().split(',').map(t => t.trim()).filter(Boolean);
+
+  tokens.forEach(token => {
+    // Direct lookup
+    const directId = token.replace(/\s+/g, '_').replace(/-/g, '_');
+    if (TEXT_ALIASES[token]) {
+      selectedSymptoms.add(TEXT_ALIASES[token]);
+    } else if (TEXT_ALIASES[directId]) {
+      selectedSymptoms.add(TEXT_ALIASES[directId]);
+    } else {
+      // Fuzzy: check if token is contained in any alias key
+      let found = false;
+      for (const [alias, id] of Object.entries(TEXT_ALIASES)) {
+        if (alias.includes(token) || token.includes(alias)) {
+          selectedSymptoms.add(id);
+          found = true;
+          break;
+        }
+      }
+    }
+  });
+
+  document.getElementById('textInput').value = '';
+  renderSymptoms(currentCategory);
+  updatePills();
+}
+
+// ═══════════════════════════════════════════════════════
+// FORWARD CHAINING INFERENCE ENGINE
+// ═══════════════════════════════════════════════════════
+function runForwardChaining(symptoms) {
+  const symptomSet = new Set(symptoms);
+  const results = [];
+
+  KNOWLEDGE_BASE.forEach(disease => {
+    // Check required symptoms (must have ALL required)
+    const requiredMet = disease.required.every(req => symptomSet.has(req));
+    if (!requiredMet) return;
+
+    // Count matched symptoms and compute weighted confidence
+    const matched = disease.symptoms.filter(s => symptomSet.has(s));
+    if (matched.length === 0) return;
+
+    // Fuzzy weighted confidence score
+    let weightedScore = 0;
+    let maxPossibleScore = 0;
+
+    disease.symptoms.forEach(s => {
+      const w = disease.weights[s] || 0.5;
+      maxPossibleScore += w;
+      if (symptomSet.has(s)) weightedScore += w;
+    });
+
+    // Normalize confidence: 0–1
+    const rawConfidence = weightedScore / maxPossibleScore;
+
+    // Bonus for matching required symptoms
+    const requiredBonus = disease.required.filter(r => symptomSet.has(r)).length / disease.required.length * 0.15;
+
+    // Coverage (how many of disease symptoms user has)
+    const coverage = matched.length / disease.symptoms.length;
+
+    // Final confidence: weighted blend
+    const confidence = Math.min(0.98, rawConfidence * 0.7 + coverage * 0.15 + requiredBonus + 0.05);
+
+    const unmatched = disease.symptoms.filter(s => !symptomSet.has(s));
+
+    results.push({
+      disease,
+      matched,
+      unmatched,
+      confidence,
+      coverage,
+      weightedScore,
+      maxPossibleScore
+    });
+  });
+
+  // Sort by confidence descending
+  results.sort((a, b) => b.confidence - a.confidence);
+  return results;
+}
+
+// ═══════════════════════════════════════════════════════
+// ANALYZE
+// ═══════════════════════════════════════════════════════
+function analyze() {
+  if (selectedSymptoms.size === 0) {
+    const btn = document.querySelector('.analyze-btn');
+    btn.style.animation = 'none';
+    btn.style.background = 'linear-gradient(135deg, var(--danger), #c0392b)';
+    btn.querySelector('.btn-inner').innerHTML = '<div class="icon">⚠️</div> Please select at least one symptom';
+    setTimeout(() => {
+      btn.style.background = 'linear-gradient(135deg, var(--accent), #5b4fcf)';
+      btn.querySelector('.btn-inner').innerHTML = '<div class="icon">⚡</div> Run Inference Engine';
+    }, 2000);
+    return;
+  }
+
+  const resultsEl = document.getElementById('results');
+  resultsEl.style.display = 'block';
+  resultsEl.innerHTML = '<div class="loading"><div class="spinner"></div><span style="font-family:\'DM Mono\',monospace;font-size:12px;color:var(--text3)">running forward chaining inference…</span></div>';
+
+  setTimeout(() => {
+    const symptoms = Array.from(selectedSymptoms);
+    const results = runForwardChaining(symptoms);
+    renderResults(results, symptoms);
+  }, 600);
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER RESULTS
+// ═══════════════════════════════════════════════════════
+function renderResults(results, symptoms) {
+  const resultsEl = document.getElementById('results');
+
+  if (results.length === 0) {
+    resultsEl.innerHTML = `
+      <div class="no-results">
+        <h3>No matching diagnoses found</h3>
+        <p>The selected symptom combination did not match any disease rule sufficiently.<br>
+        Try adding more symptoms or consult a medical professional directly.</p>
+      </div>`;
+    return;
+  }
+
+  // Build label lookup
+  const labelMap = {};
+  Object.values(SYMPTOM_CATEGORIES).forEach(cat => {
+    cat.symptoms.forEach(s => { labelMap[s.id] = s.label; });
+  });
+
+  let html = `
+    <div class="results-header">
+      <div class="results-title">
+        Inference Results
+        <span class="results-count">${results.length} possible condition${results.length > 1 ? 's' : ''} found</span>
+      </div>
+    </div>
+    <div class="disclaimer">
+      <div class="disclaimer-icon">⚠️</div>
+      <div><strong>Medical Disclaimer:</strong> This analysis is generated by a rule-based AI system for educational purposes only. It does not constitute medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical decisions.</div>
+    </div>
+  `;
+
+  results.forEach((result, i) => {
+    const { disease, matched, unmatched, confidence, coverage } = result;
+    const pct = Math.round(confidence * 100);
+    const severityClass = disease.severity === 'high' ? 'high' : disease.severity === 'medium' ? 'medium' : 'low';
+    const severityLabel = disease.severity === 'high' ? '🔴 High Severity' : disease.severity === 'medium' ? '🟡 Moderate' : '🟢 Low Severity';
+    const severityTagClass = disease.severity === 'high' ? 'tag-severity-high' : disease.severity === 'medium' ? 'tag-severity-med' : 'tag-severity-low';
+
+    const fillColor = pct >= 70 ? '#f87171' : pct >= 45 ? '#fb923c' : '#34d399';
+
+    // Inference trace
+    const traceSteps = [
+      `INPUT: {${symptoms.slice(0,3).join(', ')}${symptoms.length > 3 ? '...' : ''}}`,
+      `MATCH required: [${disease.required.join(', ')}] → ${disease.required.every(r => new Set(symptoms).has(r)) ? 'PASS ✓' : 'FAIL ✗'}`,
+      `WEIGHTED SCORE: ${result.weightedScore.toFixed(2)} / ${result.maxPossibleScore.toFixed(2)}`,
+      `FUZZY CONFIDENCE: ${(confidence * 100).toFixed(1)}%`,
+      `VERDICT: ${disease.name} — ${disease.severity.toUpperCase()} severity`
+    ];
+
+    // Symptom match visualization
+    const matchItems = disease.symptoms.map(s => {
+      const isHit = new Set(symptoms).has(s);
+      const label = labelMap[s] || s.replace(/_/g, ' ');
+      const w = disease.weights[s] || 0.5;
+      return `<div class="symptom-match-item">
+        <div class="match-dot ${isHit ? 'hit' : 'miss'}"></div>
+        <span class="match-name ${isHit ? 'hit' : ''}">${label}</span>
+        <span class="match-weight">w=${w.toFixed(1)}</span>
+      </div>`;
+    }).join('');
+
+    // Facts grid
+    const factsHtml = Object.entries(disease.facts).map(([k, v]) =>
+      `<div class="fact-item"><div class="fact-label">${k}</div><div class="fact-value">${v}</div></div>`
+    ).join('');
+
+    // Suggestions
+    const suggestionsHtml = disease.suggestions.map(s =>
+      `<div class="suggestion-item"><span class="suggestion-icon">${s.icon}</span><span>${s.text}</span></div>`
+    ).join('');
+
+    html += `
+      <div class="disease-card ${severityClass}" id="card-${disease.id}">
+        <div class="card-top" onclick="toggleCard('${disease.id}')">
+          <div class="card-icon">${disease.icon}</div>
+          <div class="card-main">
+            <div class="card-name">${disease.name}</div>
+            <div class="card-icd">ICD-10: ${disease.icd}</div>
+            <div class="card-meta">
+              <span class="meta-tag tag-confidence">Confidence: ${pct}%</span>
+              <span class="meta-tag tag-matched">${matched.length}/${disease.symptoms.length} symptoms matched</span>
+              <span class="meta-tag ${severityTagClass}">${severityLabel}</span>
+            </div>
+            <div class="confidence-bar-wrap">
+              <div class="confidence-label">
+                <span>Fuzzy Match Score</span>
+                <span>${pct}%</span>
+              </div>
+              <div class="confidence-bar">
+                <div class="confidence-fill" id="fill-${disease.id}" style="width:0%;background:${fillColor}"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-toggle" id="toggle-${disease.id}">▾</div>
+        </div>
+
+        <div class="card-details" id="details-${disease.id}">
+          <div class="detail-section">
+            <div class="detail-heading">About this condition</div>
+            <div class="detail-text">${disease.description}</div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-heading">Clinical Reasoning</div>
+            <div class="reasoning-block">${disease.reasoning}</div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-heading">Pathophysiology</div>
+            <div class="detail-text">${disease.pathophysiology}</div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-heading">Symptom Match Analysis</div>
+            <div class="symptom-match-list">${matchItems}</div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-heading">WHO / Clinical Facts</div>
+            <div class="facts-grid">${factsHtml}</div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-heading">Inference Trace (Forward Chaining)</div>
+            <div class="trace-steps">
+              ${traceSteps.map(step => `<div class="trace-step"><span class="trace-arrow">→</span><span>${step}</span></div>`).join('')}
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-heading">Recommendations & Next Steps</div>
+            <div class="suggestion-list">${suggestionsHtml}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  resultsEl.innerHTML = html;
+
+  // Animate confidence bars after render
+  setTimeout(() => {
+    results.forEach(result => {
+      const fill = document.getElementById(`fill-${result.disease.id}`);
+      if (fill) fill.style.width = Math.round(result.confidence * 100) + '%';
+    });
+    // Auto-expand first card
+    if (results.length > 0) toggleCard(results[0].disease.id);
+  }, 100);
+}
+
+function toggleCard(id) {
+  const details = document.getElementById(`details-${id}`);
+  const toggle = document.getElementById(`toggle-${id}`);
+  if (!details || !toggle) return;
+  const isOpen = details.classList.contains('open');
+  details.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('open', !isOpen);
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+renderSymptoms('all');
+</script>
+</body>
+</html>
